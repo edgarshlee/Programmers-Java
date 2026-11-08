@@ -1,34 +1,21 @@
 import java.util.*;
 
 class Solution {    
-    private static int MOD = 26;
-    
-    private StringBuilder move(String s, int n) {
-        StringBuilder sb = new StringBuilder();
-        char[] oriArr = s.toCharArray();        
+    private char push(char c, int n) {
+        if (!Character.isAlphabetic(c)) return c;
         
-        for (int i=0; i < s.length(); i++) {  
-            if ( oriArr[i] == ' ') {
-                sb.append(oriArr[i]);
-                continue;
-            }    
-            // 대소문자 start문자
-            char firstChar = Character.isUpperCase(oriArr[i]) ? 'A' : 'a';
-            char newChar = (char)((int)firstChar + (((int)oriArr[i] - (int)firstChar + n) % MOD));
-            sb.append(String.valueOf(newChar));
-        }
-        return sb;
+        int offset = Character.isUpperCase(c) ? 'A': 'a';
+        int position = c - offset;
+        position = (position + n) % ('Z'-'A'+1);
+        return (char)(offset + position);
     }
     
     public String solution(String s, int n) {
-        // String answer = "";
-        StringBuilder answer = move(s, n);
-//         StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
+        for (char c: s.toCharArray()) {
+            builder.append(push(c, n));
+        }
         
-//         for (int i=0; i < answer.length; i++) {
-//             sb.append(String.valueOf(answer[i]));
-//         }    
-        
-        return answer.toString();
+        return builder.toString();
     }
 }
