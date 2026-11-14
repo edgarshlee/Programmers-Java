@@ -1,44 +1,37 @@
-class Solution {
+class Solution {    
+    static int[] answer = new int[2]; 
     
-    static int[] compress(int[][] arr, int x, int y, int size) {
-        boolean allSame = true;
-        int prev = arr[x][y];;
-        for (int i=x; i < x+size; i++) {
-            for (int j=y; j < y+size; j++) {
-                if (prev == -1) {
-                    prev = arr[i][j];
-                    continue;
-                } else {
-                    if (prev != arr[i][j]) {
-                        allSame = false;
-                    }
-                }                
-            }    
-        }
-        // 1.모두 같을 때
-        if (allSame) {
-            if (prev ==0) {
-                return new int[]{1,0};
-            } else {
-                return new int[]{0,1};
-            }   
-        } else {
-            // 2.같지 않을 때는 분할 정복
-            int[] rec1 = compress(arr,x,y,size/2);
-            int[] rec2 = compress(arr,x+(size/2), y,size/2);
-            int[] rec3 = compress(arr,x, y+(size/2),size/2);
-            int[] rec4 = compress(arr,x+(size/2), y+(size/2), size/2);
-            
-            return new int [] {rec1[0]+rec2[0]+rec3[0]+rec4[0], rec1[1]+rec2[1]+rec3[1]+rec4[1]};
-        }
-    }
-    
-    public int[] solution(int[][] arr) {
-        int[] answer = new int[2];
-        int x =0;
-        int y =0;
-        answer = compress(arr,0,0,arr.length);
+    public int[] solution(int[][] arr) {        
+        compress(arr,0,0,arr.length);
         
         return answer;
+    }        
+    
+    private void compress(int[][] arr, int x, int y, int size) {        
+        // 1.모두 같을 때
+        if (isAllSame(arr, x, y, size)) {
+            answer[arr[x][y]]++; 
+            return;
+        }
+        
+        // 2.같지 않을 때는 분할 정복
+        int half = size/2;
+        compress(arr, x, y, half); // 좌상단
+        compress(arr, x+half, y, half); // 좌하단
+        compress(arr, x, y+half, half); // 우상단
+        compress(arr, x+half, y+half, half); // 우하단
     }
+    
+    private boolean isAllSame(int[][] arr, int x, int y, int size) { 
+        int target = arr[x][y];
+        for (int i=x; i < x+size; i++) {
+            for (int j=y; j < y+size; j++) {
+                if (target != arr[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+        
 }
