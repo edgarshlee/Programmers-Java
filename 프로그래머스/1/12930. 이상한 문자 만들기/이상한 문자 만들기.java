@@ -5,17 +5,19 @@ class Solution {
         int idx = -1;
         for (char c : s.toCharArray()) {
             if (c == ' ') {
+                answer.append(c);
                 idx = -1;
             } else {
                 idx++;
-            }              
-            if (idx % 2 == 0) {
-                // 짝수
-                answer.append(Character.toUpperCase(c));
-            } else {
-                // 홀수
-                answer.append(Character.toLowerCase(c));
-            }
+                        
+                if (idx % 2 == 0) {
+                    // 짝수
+                    answer.append(Character.toUpperCase(c));
+                } else {
+                    // 홀수
+                    answer.append(Character.toLowerCase(c));
+                }
+            }      
             // System.out.println(c);
         }
         
