@@ -18,7 +18,7 @@ class Solution {
             count++;
             if (current.equals(target)) {
                 answer = count;
-                // isFound = true;
+                isFound = true;
                 return;
             }
         }
