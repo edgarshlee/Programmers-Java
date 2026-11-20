@@ -1,43 +1,39 @@
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.IntStream;
 
 class Solution {
+    private static final int[][] RULES = {
+        {1, 2, 3, 4, 5},
+        {2, 1, 2, 3, 2, 4, 2, 5},
+        {3, 3, 1, 1, 2, 2, 4, 4, 5, 5},
+    };
+    
+    private int getPicked(int person, int problem) {
+        int[] rule = RULES[person];
+        int index = problem % rule.length;
+        return rule[index];
+    }
+    
     public int[] solution(int[] answers) {
-        int[] one = {1,2,3,4,5};
-        int[] two = {2,1,2,3,2,4,2,5};
-        int[] three = {3,3,1,1,2,2,4,4,5,5};
+        int[] corrects = new int[3];
+        int max = 0;
         
-        int[] counts = new int[3];
-        Arrays.fill(counts,0);
-        
-        for (int i=0; i < answers.length; i++) {
-            // 1번
-            if (answers[i] == one[i % one.length]) {
-                counts[0]++;
-            }
-            // 2번
-            if (answers[i] == two[i % two.length]) {
-                counts[1]++;
-            }
-            // 3번
-            if (answers[i] == three[i % three.length]) {
-                counts[2]++;
-            }
-        }        
-        // System.out.println("1:"+counts[0] + ", 2:"+counts[1] + ", 3:"+counts[2]);
-        int max = -1;
-        List<Integer> answer = new ArrayList<>();
-        for (int c: counts) {
-            max = Math.max(max, c);
-        }
-        for (int i=0; i< counts.length; i++) {
-            if (counts[i] == max) answer.add(i+1);    
-        }
-        // System.out.println(answer);
+        for (int problem = 0; problem < answers.length; problem++) {
+            int answer = answers[problem];
             
-        return answer.stream()
-                    .mapToInt(Integer::intValue)
-                    .toArray();
+            for (int person = 0; person < 3; person++) {
+                int picked = getPicked(person, problem);
+                if (answer == picked) {
+                    if (++corrects[person] > max) {
+                        max = corrects[person];
+                    }
+                }
+            }
+        }
+        
+        final int maxCorrects = max;        
+        return IntStream.range(0, 3)
+            .filter(i -> corrects[i] == maxCorrects)
+            .map(i -> i + 1)
+            .toArray();
     }
 }
