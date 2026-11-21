@@ -1,26 +1,30 @@
 import java.util.*;
+
 class Solution {
     public long solution(int n, int[] times) {
-        long answer = 0;
-        
         Arrays.sort(times);
-        long max = (long) times[times.length-1] * n; // 최악의 시간
-        long min = 1; 
         
-        while(min <= max) {
-            long mid = (max + min) / 2;
+        long left = 1;
+        long right = (long) times[0] * n; 
+        long answer = right;
+        
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+            long sum = 0;
             
-            long sum = 0; // 처리할 수 있는 사람 수 (long)
-            // mid 값으로 times 배열의 시간 값을 가진 심사관들이 몇명 심사할 수 있는지
-            for(int time : times) {
+            for (int time : times) {
                 sum += mid / time;
+                // 이미 n명 이상 처리 가능하다면 더 이상 계산하지 않고 종료
+                if (sum >= n) {
+                    break;
+                }
             }
             
             if (sum < n) {
-                min = mid+1;
+                left = mid + 1;
             } else {
-                max = mid-1;
                 answer = mid;
+                right = mid - 1;
             }
         }
         
