@@ -16,7 +16,7 @@ class Solution {
                 sum += mid / time;
             }
             
-            if(sum < n) {
+            if (sum < n) {
                 min = mid+1;
             } else {
                 max = mid-1;
